@@ -64,11 +64,15 @@ struct Particle {
 };
 
 struct Game {
+    //bool bubbler;
+    //int lastMouse[2];
+    Shape circle;
     Shape box[5];
     Particle *particle;
     int n;
     ~Game(){delete[] particle;}
     Game(){
+        //bubbler = false;
 	particle = new Particle[MAX_PARTICLES];
 	n = 0;
 	/*/declare a box shape*/
@@ -78,6 +82,10 @@ struct Game {
 	    box[i].center.x = 120 + i*65;
 	    box[i].center.y = 500 - i*60;
 	}
+    circle.radius = 150.0;
+    circle.center.x = 500;
+    circle.center.y = 0;
+
     }
 };
 
@@ -256,15 +264,37 @@ void movement(Game *game)
 		p->s.center.y < game->box[j].center.y + game->box[j].height){
 	    //collision with box
 	    p->s.center.y = game->box[j].center.y + game->box[j].height+0.1;
+	    //p->velocity.x *= 1.01;//////////////////////~~
 	    p->velocity.y *= rnd() * -0.5;
 	}
 	}
 
+        //collision with circle
+        float d0, d1, dist;
+        d0 = p->s.center.x - game->circle.center.x;
+        d1 = p->s.center.y - game->circle.center.y;
+        dist = sqrt(d0*d0 + d1*d1);
+        if (dist < game->circle.radius){
+            //move particle to circle edge
+            p->s.center.x = game->circle.center.x + (d0/dist) * game->circle.radius*1.01; //1.01 slightly out of the circle
+            p->s.center.y = game->circle.center.y + (d1/dist) * game->circle.radius*1.01;
+
+            //COLLISION!!
+            //apply a penalty to the particle
+            //change its velocity
+            p->velocity.x += (d0/dist) * 2.0;
+            p->velocity.y += (d1/dist) * 2.0;
+        }
+
+
+
+
+
 	//*check for off-screen*/
 	if (p->s.center.y < 0.0) {
-	    memcpy(&game->particle[i], &game->particle[game->n-1], sizeof(Particle));
+	    memcpy(&game->particle[i], &game->particle[game->n-1], sizeof(Particle));/////////////Particle
 	    std::cout << "off screen" << std::endl;
-	    game->n--;
+	    game->n--; //game->n--  //game->n=0;
 	}
     }
 }
@@ -274,6 +304,29 @@ void render(Game *game)
     float w, h;
     glClear(GL_COLOR_BUFFER_BIT);
     //Draw shapes...
+    //
+    //
+    const int n = 40;
+    static int firsttime = 1;
+    static Vec vert[n];
+    if (firsttime){
+        float ang = 0.0, inc = (3.14159 * 2.0) / (float)n;
+        for (int i = 0; i < n; i ++){
+            vert[i].x = cos(ang) * game->circle.radius;
+            vert[i].y = sin(ang) * game->circle.radius;
+            ang += inc;
+        }
+    firsttime = 0;
+    }
+    //draw circle
+    glColor3ub(255, 255, 255);
+    glBegin(GL_LINE_LOOP);
+        for (int i = 0; i < n; i++){
+            glVertex2i(game->circle.center.x + vert[i].x,
+                    game->circle.center.y + vert[i].y);
+        }
+    glEnd();
+
 
     //draw box
     Shape *s;
