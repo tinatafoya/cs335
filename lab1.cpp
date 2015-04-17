@@ -335,8 +335,9 @@ void render(Game *game)
     //glColor3ub(50,100,220); 
     //glColor3ub(150,220,110); lime green
     //dark pink 150 40 110  220PURPLE
-    glColor3ub(150, 40, 110);
     //glColor3ub(90,140,90);
+    //glColor3ub(150, 40, 110);
+    glColor3ub(255, 255, 255);
     for (int i = 0; i < 5; i++){
     	s = &game->box[i];
     	glPushMatrix();
@@ -354,12 +355,13 @@ void render(Game *game)
 
     //draw all particles here
     glPushMatrix();
-    glColor3ub(150,220,110); //lime green
+    //glColor3ub(150,220,110); //lime green
     //glColor3ub(rand() % 220 + 30, rand()%100+40,rand()%90+40);
     //glColor3ub(150,40,220);
     //glColor3ub(150,160,220);
     for (int i = 0; i < game->n; i++){
 	Vec *c = &game->particle[i].s.center;
+    	glColor3ub(rand() % 220 + 30, rand()%100+40,255);
 	w = 2;
 	h = 2;
 	glBegin(GL_QUADS);
