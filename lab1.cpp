@@ -34,6 +34,7 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
+#include "fonts.h"
 
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
@@ -97,6 +98,9 @@ void check_mouse(XEvent *e, Game *game);
 int check_keys(XEvent *e, Game *game);
 void movement(Game *game);
 void render(Game *game);
+
+//print
+extern void ggprint16(Shape *s, int advance, int cref, const char *fmt, ...);
 
 
 int main(void)
@@ -349,6 +353,7 @@ void render(Game *game)
     	glVertex2i(-w, h);
     	glVertex2i( w, h);
     	glVertex2i( w,-h);
+        ggprint16(&s,36,0x00cdc2c2,"TEXT");
     	glEnd();
     glPopMatrix();
     }
