@@ -34,7 +34,7 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
-#include "fonts.h"
+//#include "fonts.h"
 
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
@@ -353,7 +353,7 @@ void render(Game *game)
     	glVertex2i(-w, h);
     	glVertex2i( w, h);
     	glVertex2i( w,-h);
-        ggprint16(&s,36,0x00cdc2c2,"TEXT");
+        //ggprint16(&s,36,0x00cdc2c2,"TEXT"); //////////////////////////////to print text (need fonts.h)
     	glEnd();
     glPopMatrix();
     }
